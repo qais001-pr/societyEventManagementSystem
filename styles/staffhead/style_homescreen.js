@@ -1,44 +1,135 @@
-/* eslint-disable quotes */
-import { StyleSheet } from "react-native";
-export const styles = StyleSheet.create({
-    body: {
-        flex: 1,
-        backgroundColor: '#fff',
-    },
-    header: {
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        paddingHorizontal: 20,
-        paddingVertical: 15,
-        backgroundColor: 'green',
-        borderBottomWidth: 1,
-        borderBottomColor: '#ddd',
-    },
-    headertext: {
-        fontSize: 20,
-        fontWeight: 'bold',
-        color: 'white',
-    },
-    logout: {
-        padding: 5,
-    },
-    btnlogout: {
-        color: 'white',
-    },
-    modalBackground: {
-  flex: 1,
-  alignItems: 'center',
-  justifyContent: 'center',
-  backgroundColor: 'rgba(0, 0, 0, 0.3)', // Optional dim background
-},
-activityIndicatorWrapper: {
-  backgroundColor: '#fff',
-  borderRadius: 10,
-  padding: 20,
-  elevation: 10,
-  alignItems: 'center',
-  justifyContent: 'center',
-},
+import { StyleSheet } from 'react-native';
 
+export const styles = StyleSheet.create({
+  body: {
+    flex: 1,
+    backgroundColor: '#f1f5f9',
+  },
+  header: {
+    flexDirection: 'row',
+    backgroundColor: '#2e7d32',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    paddingVertical: 16,
+    paddingHorizontal: 16,
+  },
+  headertext: {
+    color: '#fff',
+    fontSize: 22,
+    fontWeight: '700',
+  },
+  logout: {
+    padding: 6,
+  },
+  btnlogout: {
+    color: '#fff',
+  },
+  tabContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    backgroundColor: '#f9f9f9',
+    paddingVertical: 12,
+    borderBottomWidth: 1,
+    borderBottomColor: '#ccc',
+  },
+  tabButton: {
+    paddingVertical: 8,
+    paddingHorizontal: 16,
+    borderRadius: 20,
+    backgroundColor: '#e0e0e0',
+  },
+  activeTab: {
+    backgroundColor: '#4caf50',
+  },
+  tabText: {
+    fontSize: 16,
+    color: '#333',
+    fontWeight: '500',
+  },
+  activeTabText: {
+    color: '#fff',
+    fontWeight: '700',
+  },
+  dropdownTrigger: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginHorizontal: 20,
+    marginTop: 10,
+    backgroundColor: '#ffffff',
+    borderRadius: 10,
+    borderWidth: 1.5,
+    borderColor: '#2e7d32',
+    paddingVertical: 10,
+    paddingHorizontal: 15,
+    justifyContent: 'space-between',
+  },
+  dropdownText: {
+    fontSize: 16,
+    fontWeight: '600',
+    color: '#2e7d32',
+    flex: 1,
+  },
+  dropdownIcon: {
+    color: '#2e7d32',
+    marginLeft: 10,
+  },
+  modalOverlay: {
+    flex: 1,
+    backgroundColor: 'rgba(0,0,0,0.4)',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  modalContainer: {
+    width: '85%',
+    maxHeight: '70%',
+    backgroundColor: '#fff',
+    borderRadius: 12,
+    padding: 20,
+    elevation: 10,
+  },
+  modalTitle: {
+    fontSize: 20,
+    fontWeight: '700',
+    marginBottom: 10,
+    color: '#2e7d32',
+    textAlign: 'center',
+  },
+  modalItem: {
+    paddingVertical: 12,
+    paddingHorizontal: 10,
+    borderBottomWidth: 1,
+    borderBottomColor: '#eee',
+  },
+  modalItemText: {
+    fontSize: 16,
+    color: '#333',
+  },
+  modalCloseButton: {
+    marginTop: 20,
+    alignSelf: 'center',
+    paddingVertical: 8,
+    paddingHorizontal: 20,
+    backgroundColor: '#2e7d32',
+    borderRadius: 6,
+  },
+  modalCloseButtonText: {
+    color: '#fff',
+    fontSize: 16,
+    fontWeight: '600',
+  },
+  modalBackground: {
+    flex: 1,
+    backgroundColor: 'rgba(0,0,0,0.4)',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  activityIndicatorWrapper: {
+    backgroundColor: '#fff',
+    height: 100,
+    width: 100,
+    borderRadius: 12,
+    justifyContent: 'center',
+    alignItems: 'center',
+    elevation: 10,
+  },
 });

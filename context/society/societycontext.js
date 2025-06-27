@@ -6,6 +6,7 @@ const SocietyContext = createContext();
 
 export const useSociety = () => useContext(SocietyContext);
 export const SocietyProvider = ({ children }) => {
+    const [society_id, setsociety_id] = useState(-1);
     const [items, setItems] = useState([]);
 
     const fetchData = async () => {
@@ -15,13 +16,12 @@ export const SocietyProvider = ({ children }) => {
         } catch (err) {
         }
     };
-
     useEffect(() => {
         fetchData();
     }, []);
 
     return (
-        <SocietyContext.Provider value={{ items, setItems, fetchData }}>
+        <SocietyContext.Provider value={{ items, setItems, society_id, setsociety_id, fetchData }}>
             {children}
         </SocietyContext.Provider>
     );

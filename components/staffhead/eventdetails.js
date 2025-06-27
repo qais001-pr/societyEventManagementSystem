@@ -26,7 +26,7 @@ const EventDetails = ({ route }) => {
     const [budget, setBudget] = useState(0);
     const [societyName, setSocietyName] = useState('');
     const [logisticsInfo, setLogisticsInfo] = useState('');
-
+    console.log(item);
     useEffect(() => {
         const getBudget = items.find(society => society.society_id === item?.society_id);
         setBudget(getBudget?.budget);
@@ -104,7 +104,7 @@ const EventDetails = ({ route }) => {
     };
 
     const getStatusColor = () => {
-        switch (item?.status?.toLowerCase()) {
+        switch (getDisplayStatus().toLowerCase()) {
             case 'approved':
                 return '#4CAF50';
             case 'pending':
@@ -117,19 +117,29 @@ const EventDetails = ({ route }) => {
     };
 
     const getDisplayStatus = () => {
-        if (item?.status?.toLowerCase() === 'approved') {
+        if (item.status === 'Approved' && item.adstatus === 'Approved' && item.ststatus === null) {
             return 'Pending';
         }
-        return item?.status || 'Pending';
+        if (item.status === 'Approved' && item.adstatus === 'Approved' && item.ststatus === 'Rejected') {
+            return 'Rejected';
+        }
+        if (item.status === 'Approved' && item.adstatus === 'Approved' && item.ststatus === 'Approved') {
+            return 'Approved';
+        }
     };
 
     const formatTime = (time) => {
-        return new Date(time).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: true });
+        const cleanTime = time.replace(/Z$/, '');
+        const formattedTime = new Date(cleanTime)
+            .toLocaleTimeString('en-PK', { hour: '2-digit', minute: '2-digit', hour12: true })
+            .toLowerCase();
+        return formattedTime;
     };
+
 
     return (
         <ScrollView style={styles.container}>
-            <View style={[styles.header, { backgroundColor: '#3f51b5' }]}>
+            <View style={[styles.header, { backgroundColor: 'green' }]}>
                 <Text style={styles.title}>{item?.event_name || 'Event Title'}</Text>
                 <Text style={styles.subtitle}>{item?.venue || 'Venue Name'}</Text>
             </View>
@@ -141,11 +151,11 @@ const EventDetails = ({ route }) => {
             <View style={styles.card}>
                 <View style={styles.statusBadge}>
                     <View style={[styles.statusDot, { backgroundColor: getStatusColor() }]} />
-                    <Text style={styles.statusText}>{getDisplayStatus()}</Text>
+                    <Text style={[styles.statusText, { color: getStatusColor() }]}>{getDisplayStatus()}</Text>
                 </View>
 
-                <Text style={[styles.sectionTitle, { fontWeight: 'bold', color: 'green' }]}>Society: {societyName}</Text>
-                <Text style={styles.sectionTitle}>Total Budget: ₹{budget}</Text>
+                <Text style={[styles.sectionTitle, { fontWeight: 'bold', color: getStatusColor() }]}>Society: {societyName}</Text>
+                <Text style={styles.sectionTitle}>Total Budget: RS  {budget}</Text>
                 <Text style={styles.sectionTitle}>Event Details</Text>
                 <Text style={styles.description}>{item?.event_description || 'No description available'}</Text>
 
@@ -160,12 +170,13 @@ const EventDetails = ({ route }) => {
                     <Icon name="access-time" size={18} color="#555" />
                     <Text style={styles.detailText}>
                         {formatTime(item?.event_start_time)} - {formatTime(item?.event_end_time)}
+
                     </Text>
                 </View>
 
                 <View style={styles.detailRow}>
-                    <Icon name="attach-money" size={18} color="#555" />
-                    <Text style={styles.detailText}>₹{item?.budget}</Text>
+                    <Icon name="money" size={18} color="#555" />
+                    <Text style={styles.detailText}>RS {item?.budget}</Text>
                 </View>
 
                 <View style={styles.detailRow}>
@@ -204,34 +215,36 @@ const EventDetails = ({ route }) => {
                         </Text>
                     </View>
                 )}
-
-                <View style={styles.inputContainer}>
-                    <Text style={styles.inputLabel}>Logistics Information (Required)</Text>
-                    <TextInput
-                        style={styles.input}
-                        placeholder="Enter logistics details..."
-                        multiline
-                        value={logisticsInfo}
-                        onChangeText={setLogisticsInfo}
-                    />
-                    <Text>{logisticsInfo.length} / 500</Text>
-                </View>
-
-                <View style={styles.buttonContainer}>
-                    <TouchableOpacity style={styles.buttonWrapper} onPress={handleApproved}>
-                        <View style={[styles.button, { backgroundColor: '#4CAF50' }]}>
-                            <Icon name="check" size={20} color="#fff" />
-                            <Text style={styles.buttonText}>Approve</Text>
+                {(getDisplayStatus() === 'Pending') && (
+                    <View>
+                        <View style={styles.inputContainer}>
+                            <Text style={styles.inputLabel}>Logistics Information (Required)</Text>
+                            <TextInput
+                                style={styles.input}
+                                placeholder="Enter logistics details..."
+                                multiline
+                                value={logisticsInfo}
+                                onChangeText={setLogisticsInfo}
+                            />
+                            <Text>{logisticsInfo.length} / 500</Text>
                         </View>
-                    </TouchableOpacity>
+                        <View style={styles.buttonContainer}>
+                            <TouchableOpacity style={styles.buttonWrapper} onPress={handleApproved}>
+                                <View style={[styles.button, { backgroundColor: '#4CAF50' }]}>
+                                    <Icon name="check" size={20} color="#fff" />
+                                    <Text style={styles.buttonText}>Approve</Text>
+                                </View>
+                            </TouchableOpacity>
 
-                    <TouchableOpacity style={styles.buttonWrapper} onPress={handleRejected}>
-                        <View style={[styles.button, { backgroundColor: '#F44336' }]}>
-                            <Icon name="close" size={20} color="#fff" />
-                            <Text style={styles.buttonText}>Reject</Text>
+                            <TouchableOpacity style={styles.buttonWrapper} onPress={handleRejected}>
+                                <View style={[styles.button, { backgroundColor: '#F44336' }]}>
+                                    <Icon name="close" size={20} color="#fff" />
+                                    <Text style={styles.buttonText}>Reject</Text>
+                                </View>
+                            </TouchableOpacity>
                         </View>
-                    </TouchableOpacity>
-                </View>
+                    </View>
+                )}
             </View>
         </ScrollView>
     );

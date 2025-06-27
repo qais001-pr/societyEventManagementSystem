@@ -1,13 +1,7 @@
-import React,
-{
-    useEffect,
-    useRef,
-}
-    from 'react';
+import React from 'react';
 import {
     Text,
     TouchableOpacity,
-    Animated,
     StyleSheet,
     View,
 }
@@ -19,20 +13,9 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 
 const EventCard = ({ item, index }) => {
     const navigation = useNavigation();
-    const fadeAnim = useRef(new Animated.Value(0)).current;
-
-    useEffect(() => {
-        Animated.timing(fadeAnim, {
-            toValue: 1,
-            duration: 500,
-            delay: index * 100,
-            useNativeDriver: true,
-        }).start();
-    }, [fadeAnim, index]);
-
     return (
         <SafeAreaView>
-            <Animated.View style={[styles.card, { opacity: fadeAnim }]}>
+            <View style={styles.card} >
                 <View style={styles.row}>
                     <Icon name="calendar" size={18} color="#2e7d32" style={styles.icon} />
                     <Text style={styles.title}>{item.event_name}</Text>
@@ -74,7 +57,7 @@ const EventCard = ({ item, index }) => {
                     <Icon name="info-circle" size={14} color="#fff" style={styles.buttonIcon} />
                     <Text style={styles.detailButtonText}>View Details</Text>
                 </TouchableOpacity>
-            </Animated.View>
+            </View>
         </SafeAreaView>
     );
 };

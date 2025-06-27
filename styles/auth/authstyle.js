@@ -1,61 +1,86 @@
-/* eslint-disable quotes */
-/* eslint-disable comma-dangle */
-import { StyleSheet } from "react-native";
+import { StyleSheet } from 'react-native';
+
 export const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        backgroundColor: '#fff',
-        padding: 20,
-        justifyContent: 'center'
+    topContainer: {
+        height: 200,
+        justifyContent: 'center',
+        alignItems: 'center',
+        borderBottomRightRadius: 100,
     },
-    title: {
-        fontSize: 26,
+    logoImage: {
+        width: 170,
+        height: 170,
+        resizeMode: 'contain',
+        marginTop: 50,
+    },
+    formContainer: {
+        height: '70%',
+        marginTop: 70,
+        backgroundColor: '#CAD1CA',
+        paddingHorizontal: 25,
+        paddingTop: 60,
+        borderTopLeftRadius: 40,
+        // marginTop: -50,
+    },
+    loginTitle: {
+        fontSize: 38,
         fontWeight: 'bold',
-        marginBottom: 24,
-        textAlign: 'center'
+        color: '#111',
+        textAlign: 'center',
+    },
+    subText: {
+        textAlign: 'center',
+        color: '#111',
+        fontSize: 19,
+        marginBottom: 30,
+    },
+    label: {
+        fontSize: 15,
+        fontWeight: 'bold',
+        color: '#777',
+        marginBottom: 5,
     },
     input: {
-        borderWidth: 1,
-        borderColor: '#ccc',
-        borderRadius: 8,
+        fontSize: 16,
+        backgroundColor: '#E9E9E9',
         padding: 12,
-        marginBottom: 16,
-        fontSize: 16,
-        color:'black',
+        borderRadius: 10,
+        marginBottom: 20,
     },
-    button: {
-        backgroundColor: '#28A745',
-        padding: 14,
-        borderRadius: 8,
-        alignItems: 'center'
-    },
-    buttonText: {
-        color: '#fff',
-        fontSize: 16,
-        fontWeight: '600'
-    },
-    linkContainer: {
-        marginTop: 16,
-        alignItems: 'center'
-    },
-    linkText: {
-        color: '#28A745',
-        fontSize: 14
-    },
-    inputRow: {
+    passwordWrapper: {
         flexDirection: 'row',
         alignItems: 'center',
-        borderWidth: 1,
-        borderColor: '#ccc',
-        borderRadius: 8,
-        paddingHorizontal: 10,
-        marginBottom: 15,
+        backgroundColor: '#E9E9E9',
+        borderRadius: 10,
+        paddingHorizontal: 12,
+        marginBottom: 20,
     },
     passwordInput: {
-        color:'black',
         flex: 1,
-        height: 48,
-        paddingRight: 10,
+        fontSize: 16,
+        paddingVertical: 12,
     },
-
+    loginButton: {
+        backgroundColor: 'green',
+        paddingVertical: 12,
+        borderRadius: 8,
+        alignItems: 'center',
+        marginBottom: 20,
+    },
+    loginButtonText: {
+        fontSize: 18,
+        color: '#fff',
+        fontWeight: 'bold',
+    },
+    forgotText: {
+        fontSize: 15,
+        textAlign: 'center',
+        color: '#111',
+        marginBottom: 5,
+    },
+    signupText: {
+        textAlign: 'center',
+        color: '#000',
+        fontWeight: 'bold',
+    },
 });

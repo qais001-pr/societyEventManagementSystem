@@ -1,98 +1,186 @@
-/* eslint-disable quotes */
-import { StyleSheet } from "react-native";
+import { StyleSheet, Dimensions } from 'react-native';
+
+const { width } = Dimensions.get('window');
+
 const styles = StyleSheet.create({
-    container: { flex: 1, backgroundColor: '#f5f5f5' },
-    header: {
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        backgroundColor: 'green',
-        padding: 15,
+    container: {
+        flex: 1,
+        backgroundColor: '#f4f6f8',
+        paddingBottom: 20,
     },
-    headerText: { color: '#fff', fontSize: 16, fontWeight: 'bold' },
-    logoutButton: { padding: 5 },
+
+header: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    backgroundColor: '#2e7d32', // ✅ Rich professional green
+    paddingVertical: 14,
+    paddingHorizontal: 20,
+    elevation: 5,               // Android shadow
+    shadowColor: '#000',        // iOS shadow
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.3,
+    shadowRadius: 3,
+},
+
+headerText: {
+    color: '#ffffff',
+    fontSize: 20,
+    fontWeight: '700',
+    flex: 1,
+    paddingRight: 10,
+},
+
+headerIcons: {
+    flexDirection: 'row',
+    alignItems: 'center',
+},
+
+searchInputHeader: {
+    flex: 1,
+    backgroundColor: '#ffffff',
+    borderRadius: 25,
+    paddingHorizontal: 15,
+    paddingVertical: 8,
+    fontSize: 16,
+    color: '#333333',
+    elevation: 3,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.1,
+    shadowRadius: 2,
+},
+
+iconRight: {
+    marginLeft: 15,
+},
+
+iconButton: {
+    padding: 8,
+    marginLeft: 10,
+},
+
+
+    // Tabs
     tabContainer: {
         flexDirection: 'row',
         justifyContent: 'space-around',
-        backgroundColor: '#fff',
-        borderBottomWidth: 2,
-        borderBottomColor: '#ddd',
+        backgroundColor: '#e0e0e0',
+        paddingVertical: 10,
+        borderBottomWidth: 1,
+        borderBottomColor: '#cfd8dc',
     },
-    tab: { paddingVertical: 10 },
-    tabText: { color: '#555' },
-    activeTab: { borderBottomWidth: 2, borderBottomColor: 'green' },
-    activeTabText: { color: 'green', fontWeight: 'bold' },
-    searchContainer: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        margin: 10,
-    },
-    searchInput: {
-        flex: 1,
-        borderWidth: 1,
-        borderColor: '#ddd',
-        borderRadius: 8,
+    tab: {
         paddingHorizontal: 10,
-        backgroundColor: '#fff',
+        paddingVertical: 6,
+        borderRadius: 20,
+        backgroundColor: '#c8e6c9',
     },
-    searchButton: {
-        marginLeft: 8,
-        padding: 10,
-        backgroundColor: 'green',
-        borderRadius: 8,
-        justifyContent: 'center',
-        alignItems: 'center',
+    activeTab: {
+        backgroundColor: '#2e7d32',
     },
-    dropdownWrapper: {
-        marginLeft: 8,
-        flex: 1,
-        zIndex: 1000,
-    },
-    dropdown: {
-        borderColor: '#ccc',
-    },
-    dropdownContainer: {
-        borderColor: '#ccc',
-    },
-    dropdownText: {
+    tabText: {
+        color: '#2e7d32',
         fontSize: 14,
+        fontWeight: '600',
     },
-    infoContainer: {
+    activeTabText: {
+        color: '#fff',
+    },
+
+    // Dropdown Button
+    responsiveDropdownButton: {
         flexDirection: 'row',
-        flexWrap: 'wrap',
         justifyContent: 'space-between',
-        alignItems: 'flex-start',
-        backgroundColor: '#ffffff',
-        paddingVertical: 14,
-        paddingHorizontal: 12,
-        borderRadius: 10,
-        marginBottom: 14,
-        shadowColor: '#000',
-        shadowOffset: { width: 0, height: 2 },
-        shadowOpacity: 0.1,
-        shadowRadius: 4,
-        elevation: 4,
+        alignItems: 'center',
+        backgroundColor: '#fff',
+        borderColor: '#cfd8dc',
+        borderWidth: 1,
+        borderRadius: 8,
+        paddingHorizontal: 15,
+        paddingVertical: 10,
+        margin: 15,
+    },
+    responsiveDropdownText: {
+        color: '#333',
+        fontSize: 16,
+        fontWeight: '500',
+    },
+
+    // Info Section
+    infoContainer: {
+        marginHorizontal: 15,
+        marginBottom: 10,
+        backgroundColor: '#e8f5e9',
+        padding: 12,
+        borderRadius: 8,
+        elevation: 2,
     },
     infoBox: {
-        flexBasis: '30%',
-        minWidth: 110,
-        paddingVertical: 4,
+        marginBottom: 6,
     },
     infoText: {
-        fontSize: 16,
+        fontSize: 14,
+        color: '#1b5e20',
         fontWeight: '600',
-        color: '#333',
     },
-    cardList: {
-        padding: 10,
+
+    // Error & Empty
+    errorText: {
+        textAlign: 'center',
+        color: 'red',
+        marginTop: 15,
+        fontSize: 16,
+        fontWeight: '500',
     },
     emptyText: {
         textAlign: 'center',
         marginTop: 20,
-        color: 'black',
+        fontSize: 16,
+        color: '#666',
     },
+
+    // Footer space
     footerSpace: {
-        marginBottom: '15%',
+        height: 100,
+    },
+
+    // Modal
+    modalContainer: {
+        flex: 1,
+        backgroundColor: 'rgba(0, 0, 0, 0.4)',
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    modalContent: {
+        width: width * 0.85,
+        backgroundColor: '#fff',
+        borderRadius: 10,
+        padding: 16,
+        maxHeight: '80%',
+    },
+    modalHeader: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        marginBottom: 10,
+    },
+    modalTitle: {
+        fontSize: 18,
+        fontWeight: 'bold',
+        color: '#2e7d32',
+    },
+    closeButton: {
+        padding: 5,
+    },
+    modalItem: {
+        paddingVertical: 12,
+        borderBottomWidth: 1,
+        borderBottomColor: '#ccc',
+    },
+    modalItemText: {
+        fontSize: 16,
+        color: '#333',
     },
 });
 

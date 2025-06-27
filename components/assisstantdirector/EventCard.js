@@ -22,6 +22,13 @@ const EventCard = ({ item, index }) => {
         }).start();
     }, [fadeAnim, index]);
 
+    const formatTime = (time) => {
+        const cleanTime = time.replace(/Z$/, '');
+        const formattedTime = new Date(cleanTime)
+            .toLocaleTimeString('en-PK', { hour: '2-digit', minute: '2-digit', hour12: true })
+            .toLowerCase();
+        return formattedTime;
+    };
     return (
         <Animated.View style={[styles.card, { opacity: fadeAnim }]}>
             <View style={styles.row}>
@@ -38,11 +45,7 @@ const EventCard = ({ item, index }) => {
                 <Icon name="clock-o" size={14} color="#555" style={styles.icon} />
                 <Text style={styles.detail}>
                     Start: {new Date(item.event_start_date).toLocaleDateString()} at{' '}
-                    {new Date(item.event_start_time).toLocaleTimeString([], {
-                        hour: '2-digit',
-                        minute: '2-digit',
-                        hour12: true,
-                    })}
+                    {formatTime(item.event_start_time)}
                 </Text>
             </View>
 
@@ -50,11 +53,7 @@ const EventCard = ({ item, index }) => {
                 <Icon name="clock-o" size={14} color="#555" style={styles.icon} />
                 <Text style={styles.detail}>
                     End: {new Date(item.event_end_date).toLocaleDateString()} at{' '}
-                    {new Date(item.event_end_time).toLocaleTimeString([], {
-                        hour: '2-digit',
-                        minute: '2-digit',
-                        hour12: true,
-                    })}
+                    {formatTime(item.event_end_time)}
                 </Text>
             </View>
 

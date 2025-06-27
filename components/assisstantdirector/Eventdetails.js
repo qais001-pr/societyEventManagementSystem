@@ -94,23 +94,37 @@ const EventDetails = ({ route }) => {
             setLoading(false);
         }
     };
-
+    const getStatus = () => {
+        if (event.status === 'Pending') {
+            return 'Pending';
+        }
+        if (event.status === 'Rejected' || event.adstatus === 'Rejected' || event.staffheadstatus === 'Rejected' || event.itheadstatus === 'Rejected') {
+            return 'Rejected';
+        }
+        if (event.status === 'Approved') {
+            return 'Approved';
+        }
+    }
     const getStatusColor = () => {
-        switch (event.status.toLowerCase()) {
+        switch (getStatus().toLowerCase()) {
             case 'approved':
-                return '#388e3c'; // Green
+                return '#388e3c';
             case 'pending':
-                return '#fdd835'; // Yellow
+                return '#fdd835';
             case 'rejected':
-                return '#d32f2f'; // Red
+                return '#d32f2f';
             default:
-                return '#c8e6c9'; // Default pale green
+                return '#c8e6c9';
         }
     };
 
 
     const formatTime = (time) => {
-        return new Date(time).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: true });
+        const cleanTime = time.replace(/Z$/, '');
+        const formattedTime = new Date(cleanTime)
+            .toLocaleTimeString('en-PK', { hour: '2-digit', minute: '2-digit', hour12: true })
+            .toLowerCase();
+        return formattedTime;
     };
 
     return (
@@ -138,7 +152,7 @@ const EventDetails = ({ route }) => {
             <View style={styles.card}>
                 <View style={styles.statusBadge}>
                     <View style={[styles.statusDot, { backgroundColor: getStatusColor() }]} />
-                    <Text style={styles.statusText}>{event.status}</Text>
+                    <Text style={styles.statusText}>{getStatus()}</Text>
                 </View>
 
                 <Text style={styles.sectionTitle}>Event Details</Text>
@@ -159,8 +173,9 @@ const EventDetails = ({ route }) => {
                 </View>
 
                 <View style={styles.detailRow}>
-                    <Icon name="attach-money" size={18} color="#2e7d32" />
-                    <Text style={styles.detailText}>₹{event.budget}</Text>
+                    {/* <Icon name="attach-money" size={18} color="#2e7d32" /> */}
+                    <Text style={{ color: 'green', fontSize: 18 }}>RS </Text>
+                    <Text style={styles.detailText}>{event.budget}</Text>
                 </View>
 
                 <View style={styles.detailRow}>
@@ -184,11 +199,12 @@ const EventDetails = ({ route }) => {
                     </Text>
                 </View>
 
-                {event.approved_date && (
+                {(getStatus() === 'Rejected' || getStatus() === 'Approved') && (
                     <View style={styles.detailRow}>
-                        <Icon name="check-circle" size={18} color="#2e7d32" />
+                        <Icon name="check-circle" size={18} color={getStatusColor()} />
                         <Text style={styles.detailText}>
-                            Approved on {new Date(event.approved_date).toLocaleDateString()}
+                            {/* Approved on {new Date(event.approved_date).toLocaleDateString()} */}
+                            {getStatus()}
                         </Text>
                     </View>
                 )}

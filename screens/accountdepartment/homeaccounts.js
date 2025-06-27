@@ -1,184 +1,221 @@
 /* eslint-disable no-unused-vars */
-/* eslint-disable radix */
-/* eslint-disable quotes */
-/* eslint-disable react-hooks/exhaustive-deps */
-/* eslint-disable react-native/no-inline-styles */
-/* eslint-disable react/self-closing-comp */
-/* eslint-disable jsx-quotes */
-/* eslint-disable eol-last */
 /* eslint-disable semi */
-import { View, Text, TouchableOpacity, FlatList, ActivityIndicator, Alert } from 'react-native'
-import React, { useEffect, useState } from 'react'
-import { SafeAreaView } from 'react-native-safe-area-context'
-import DropDownPicker from 'react-native-dropdown-picker';
+/* eslint-disable no-bitwise */
+/* eslint-disable quotes */
+/* eslint-disable react-native/no-inline-styles */
+/* eslint-disable jsx-quotes */
+/* eslint-disable radix */
+/* eslint-disable react-hooks/exhaustive-deps */
+import {
+    View, Text, TouchableOpacity, FlatList, ActivityIndicator, Alert, Modal,
+    RefreshControl,
+} from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { useAuth } from '../../context/auth/authcontext';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { useNavigation } from '@react-navigation/native';
-import { styles } from '../../styles/accountdepartment/homeaccount';
 import { ip } from '../../config';
 import axios from 'axios';
-import { useEvents } from '../../context/events/eventcontext';
+
 import EventCard from '../../components/accountsdepartment/approvedeventcard';
 import { useSociety } from '../../context/society/societycontext';
-const Homeaccounts = () => {
-    const { items, fetchData } = useSociety()
-    const { events } = useEvents()
-    const [eventlist, seteventlist] = useState([])
-    const navigation = useNavigation()
-    const { user, logout } = useAuth()
-    const [dropdownItems, setDropdownItems] = useState([]);
-    const [dropdownOpen, setDropdownOpen] = useState(false);
-    const [selectedOption, setSelectedOption] = useState(null);
-    const [societies, setSocieties] = useState([])
-    useEffect(() => {
-        const fetchApprovedEvents = async () => {
-            await fetchData()
-            try {
-                const response = await axios.get(`${ip}/api/events/department/approve/rejected`);
-                if (response.data.success) {
-                    seteventlist(response.data.data);
-                }
-            } catch (err) {
-                // console.error('Failed to load department events:', err);
-                Alert.alert(err.message)
-            }
-        };
-        fetchApprovedEvents();
-    }, []);
+import { localStyles, styles } from '../../styles/accountdepartment/homeaccount';
 
-    // Load dropdown items from context
+const Homeaccounts = () => {
+    const { items, fetchData } = useSociety();
+    const [eventlist, seteventlist] = useState([]);
+    const [allEvents, setAllEvents] = useState([]);
+    const navigation = useNavigation();
+    const { user, logout } = useAuth();
+    const [activeTab, setActiveTab] = useState('Pending');
+    const tabs = ['Pending', 'Approved', 'Rejected'];
+    const [loading, setLoading] = useState(false);
+    const [selectedOption, setSelectedOption] = useState(null);
+    const [dropdownItems, setDropdownItems] = useState([]);
+    const [modalVisible, setModalVisible] = useState(false);
+    const [societies, setSocieties] = useState([]);
+    console.log(selectedOption)
     useEffect(() => {
         if (Array.isArray(items) && items.length > 0) {
             const formattedItems = items.map(society => ({
-                label: society.S_title,
+                label: society.S_name,
                 value: society.society_id,
             }));
             setDropdownItems(formattedItems);
         }
     }, [items]);
 
-    // Load society events from `/api/societies/:id` when one is selected
-    const loadEventsFromSociety = async () => {
-        try {
-            console.log('Selected Society ID:', selectedOption);
-            const response = await axios.get(`${ip}/api/societies/${parseInt(selectedOption)}`);
-            console.log('API Success:', response.data.success);
-
-            if (response.data.success) {
-                seteventlist(response.data.data);
-            } else {
-                seteventlist([]); // Clear if no success
-            }
-
-        } catch (err) {
-            seteventlist([]);
-        }
-    };
+    useEffect(() => {
+        fetchDatabyTabs();
+    }, [activeTab]);
 
     useEffect(() => {
         if (selectedOption) {
             loadEventsFromSociety();
-            // Also update selected society's budget display
             const selected = items.find(s => s.society_id === selectedOption);
+            console.log(selected)
             if (selected) {
                 setSocieties([selected]);
             }
         }
     }, [selectedOption, items]);
-    const handleLogout = () => {
-        logout()
-        if (user) {
-            navigation.replace('login')
+
+    const fetchDatabyTabs = async () => {
+        try {
+            setLoading(true);
+            let endpoint = '/api/accountsdepartment/pending';
+            switch (activeTab) {
+                case 'Approved':
+                    endpoint = '/api/accountsdepartment/approved';
+                    break;
+                case 'Rejected':
+                    endpoint = '/api/accountsdepartment/rejected';
+                    break;
+                default:
+                    endpoint = '/api/accountsdepartment/pending';
+            }
+
+            const response = await axios.get(`${ip}${endpoint}`);
+            if (response.data.success) {
+                setAllEvents(response.data.data);
+                seteventlist(response.data.data);
+            } else {
+                setAllEvents([]);
+                seteventlist([]);
+            }
+        } catch (err) {
+            setAllEvents([]);
+            seteventlist([]);
+        } finally {
+            setLoading(false);
         }
-    }
+    };
+
+    const loadEventsFromSociety = () => {
+        console.log(allEvents);
+        const getEventsBySociety = allEvents.filter(e => e.society_id === selectedOption);
+        console.log(getEventsBySociety)
+        seteventlist(getEventsBySociety);
+    };
+
+    const handleLogout = () => {
+        logout();
+        if (user) {
+            navigation.replace('login');
+        }
+    };
+
     return (
         <SafeAreaView style={styles.container}>
             <View style={styles.header}>
-                <Text style={styles.welcomeText}>Welcome, {user.name}</Text>
+                <Text style={styles.welcomeText}>Accounts Department</Text>
                 <TouchableOpacity onPress={handleLogout} style={styles.logoutButton}>
                     <Icon name="sign-out" size={24} color="#fff" />
                     <Text style={styles.logoutText}>Logout</Text>
                 </TouchableOpacity>
             </View>
-            <View
-                style={{
-                    flexDirection: 'row',
-                    justifyContent: 'space-between',
-                    alignItems: 'center',
-                    width: '90%',
-                    alignSelf: 'center',
-                    marginTop: 12,
-                    gap: 10,
-                }}
-            >
-                <View style={{ flex: 1 }}>
-                    <DropDownPicker
-                        open={dropdownOpen}
-                        value={selectedOption}
-                        items={dropdownItems}
-                        setOpen={setDropdownOpen}
-                        setValue={setSelectedOption}
-                        setItems={setDropdownItems}
-                        placeholder="Select Society"
-                        style={{
-                            borderColor: '#E0E0E0',
-                            borderRadius: 10,
-                            paddingVertical: 10,
-                            paddingHorizontal: 12,
-                            backgroundColor: '#fff',
-                            zIndex: dropdownOpen ? 1000 : 0, // Ensure dropdown overlays
-                        }}
-                        dropDownContainerStyle={{
-                            borderColor: '#E0E0E0',
-                            borderRadius: 10,
-                            backgroundColor: '#fff',
-                        }}
-                        textStyle={{ fontSize: 14, color: '#333' }}
-                        placeholderStyle={{ color: '#999' }}
-                    />
-                </View>
 
-                {societies.length > 0 && (
-                    <View
-                        style={{
-                            flexShrink: 0,
-                            paddingVertical: 10,
-                            paddingHorizontal: 14,
-                            backgroundColor: '#f0f9f2',
-                            borderRadius: 10,
-                            borderColor: '#cce5cc',
-                            borderWidth: 1,
-                            justifyContent: 'center',
-                            alignItems: 'center',
+            <Modal visible={loading} transparent={true} animationType="fade">
+                <View style={styles.overlay}>
+                    <View style={styles.loaderContainer}>
+                        <ActivityIndicator size="large" color="green" />
+                        <Text style={{ color: 'green', marginTop: 5 }}>Please Wait</Text>
+                    </View>
+                </View>
+            </Modal>
+
+            <View style={styles.tabContainer}>
+                {tabs.map(tab => (
+                    <TouchableOpacity
+                        key={tab}
+                        style={[styles.tabButton, activeTab === tab && styles.activeTab]}
+                        onPress={() => {
+                            setSelectedOption(null);
+                            setActiveTab(tab);
                         }}
                     >
-                        <Text style={{ fontSize: 13, fontWeight: '600', color: '#2E8B57' }}>
+                        <Text style={[styles.tabText, activeTab === tab && styles.activeTabText]}>
+                            {tab}
+                        </Text>
+                    </TouchableOpacity>
+                ))}
+            </View>
+
+            <View style={localStyles.dropdownRow}>
+                <TouchableOpacity
+                    style={localStyles.dropdownButton}
+                    onPress={() => setModalVisible(true)}
+                >
+                    <Text style={localStyles.dropdownButtonText}>
+                        {selectedOption
+                            ? dropdownItems.find(item => item.value === selectedOption)?.label
+                            : 'Select Society'}
+                    </Text>
+                    <Icon name="caret-down" size={16} color="#333" />
+                </TouchableOpacity>
+
+                {societies.length > 0 && (
+                    <View style={localStyles.budgetBox}>
+                        <Text style={localStyles.budgetText}>
                             Budget: {societies[0].budget}
                         </Text>
                     </View>
                 )}
             </View>
 
-            <View>
-                {eventlist ? (
-                    <FlatList
-                        data={eventlist}
-                        keyExtractor={(item) => item?.event_requisition_id?.toString() ?? null}
-                        renderItem={({ item, index }) => <EventCard item={item} index={index} />}
-                        contentContainerStyle={styles.cardList}
-                        onEndReachedThreshold={0.5}
-                        ListEmptyComponent={<Text style={styles.emptyText}>No events found.</Text>}
-                        ListFooterComponent={<View style={{ marginBottom: "50%" }}></View>}
-                    />
-                ) : (
-                    <ActivityIndicator size='small' />
-                )}
-
+            <View style={styles.listContainer}>
+                <FlatList
+                    data={eventlist}
+                    keyExtractor={(item, index) =>
+                        item?.event_requisition_id?.toString() || `key-${index}`
+                    }
+                    renderItem={({ item, index }) => (
+                        <EventCard item={item} index={index} />
+                    )}
+                    contentContainerStyle={styles.cardList}
+                    refreshControl={<RefreshControl refreshing={loading} onRefresh={fetchDatabyTabs} />}
+                    ListEmptyComponent={<Text style={styles.emptyText}>No events found.</Text>}
+                    ListFooterComponent={<View style={{ marginBottom: 20 }} />}
+                />
             </View>
-        </SafeAreaView>
-    )
 
-}
+            {/* Modal Dropdown */}
+            <Modal
+                animationType="fade"
+                transparent={true}
+                visible={modalVisible}
+                onRequestClose={() => setModalVisible(false)}
+            >
+                <View style={localStyles.modalOverlay}>
+                    <View style={localStyles.modalContainer}>
+                        <Text style={localStyles.modalTitle}>Choose a Society</Text>
+                        <FlatList
+                            data={dropdownItems}
+                            keyExtractor={(item) => item.value.toString()}
+                            renderItem={({ item }) => (
+                                <TouchableOpacity
+                                    style={localStyles.modalItem}
+                                    onPress={() => {
+                                        setSelectedOption(item.value);
+                                        setModalVisible(false);
+                                    }}
+                                >
+                                    <Text style={localStyles.modalItemText}>{item.label}</Text>
+                                </TouchableOpacity>
+                            )}
+                        />
+                        <TouchableOpacity
+                            onPress={() => setModalVisible(false)}
+                            style={localStyles.closeModalButton}
+                        >
+                            <Text style={localStyles.closeModalText}>Cancel</Text>
+                        </TouchableOpacity>
+                    </View>
+                </View>
+            </Modal>
+        </SafeAreaView >
+    );
+};
 
-
-export default Homeaccounts
+export default Homeaccounts;

@@ -14,10 +14,7 @@ export const EventProvider = ({ children }) => {
 
     const loadeventfromsearchquery = async (query) => {
         try {
-            if (!query || typeof query !== 'string') {
-                setEvents([]);
-                return;
-            }
+
             const response = await axios.get(
                 `${ip}/api/events/eventname/${query}`
             );
@@ -62,6 +59,17 @@ export const EventProvider = ({ children }) => {
         }
     };
 
+    const loadRequestedEvents = async () => {
+        try {
+            const res = await axios.get(`${ip}/api/events/eventstatus/Pending`);
+            if (res.data.success) {
+                setEvents(res.data.data);
+                console.log(events);
+            }
+        } catch {
+        }
+    };
+
     useEffect(() => {
         fetchEvents();
     }, []);
@@ -74,6 +82,7 @@ export const EventProvider = ({ children }) => {
             loadeventfromstatus,
             loadeventfromsocieties,
             loadeventfromsearchquery,
+            loadRequestedEvents,
         }}>
             {children}
         </EventContext.Provider>

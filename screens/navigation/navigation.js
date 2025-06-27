@@ -1,21 +1,28 @@
 /* eslint-disable jsx-quotes */
 /* eslint-disable comma-dangle */
-//
 import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import LoginScreen from '../auth/loginScreen';
 import SignupScreen from '../auth/SignupScreen';
-import ChairpersonDashboard from '../societychairperson/ChairpersonDashboard';
+import ChairpersonDashboard from '../societychairperson/eventrequest';
 import Forgotpassword from '../auth/Forgotpassword';
 import Updatepassword from '../auth/updatepassword';
 import AssisstantDirectorDashboard from '../assisstantdashboard/assisstantdirectordashboard';
-import EventDetails from '../../components/assisstantdirector/Eventdetails';
+
 import Homeaccounts from '../accountdepartment/homeaccounts';
-import ApprovedEventDetails from '../../components/accountsdepartment/approvedevents';
+
 import HomeStaffheadPage from '../staffhead/homescreen';
-import Staffeventdetails from '../../components/staffhead/eventdetails';
 import Itheadhomescreen from '../ithead/itheadhomescreen';
+import EventDetails from '../../components/assisstantdirector/Eventdetails';
+import Staffeventdetails from '../../components/staffhead/eventdetails';
+import ApprovedEventDetails from '../../components/accountsdepartment/approvedevents';
+import itEventDetails from '../../components/ithead/EventDetails';
+import SocietyChairperson from '../societychairperson/homescreen';
+import EventLists from '../societychairperson/eventLists';
+import CardDetails from '../../components/societychairperson/CardDetails';
+import Card from '../../components/societychairperson/Card';
+import UpdateEventDetails from '../societychairperson/updateScreen';
 const Stack = createNativeStackNavigator();
 export default function AppNavigation() {
   return (
@@ -38,6 +45,18 @@ export default function AppNavigation() {
           animationDuration: 2000
         }} />
         <Stack.Screen name="chairpersondashboard" component={ChairpersonDashboard} options={{ headerShown: false, animation: 'slide_from_right', animationDuration: 1000 }} />
+        <Stack.Screen name='SocietyChairpersonhomescreen' component={SocietyChairperson}
+          options={{
+            headerShown: false,
+            animation: 'slide_from_right',
+            animationDuration: 1000
+          }} />
+        <Stack.Screen name='SocietyEventLists' component={EventLists}
+          options={{
+            headerShown: false,
+            animation: 'slide_from_right',
+            animationDuration: 1000
+          }} />
         <Stack.Screen name='assisstantdashboard' component={AssisstantDirectorDashboard}
           options={{
             headerShown: false,
@@ -45,6 +64,12 @@ export default function AppNavigation() {
             animationDuration: 1000
           }} />
         <Stack.Screen name='eventdetails' component={EventDetails}
+          options={{
+            headerShown: false,
+            animation: 'slide_from_right',
+            animationDuration: 1000
+          }} />
+        <Stack.Screen name='updateeventdetails' component={UpdateEventDetails}
           options={{
             headerShown: false,
             animation: 'slide_from_right',
@@ -62,19 +87,38 @@ export default function AppNavigation() {
             animation: 'slide_from_right',
             animationDuration: 1000
           }} />
-            <Stack.Screen name='homestaffheadpage' component={HomeStaffheadPage}
+        <Stack.Screen name='homestaffheadpage' component={HomeStaffheadPage}
           options={{
             headerShown: false,
             animation: 'slide_from_right',
             animationDuration: 1000
           }} />
-              <Stack.Screen name='staffheadeventdetails' component={Staffeventdetails}
+        <Stack.Screen name='staffheadeventdetails' component={Staffeventdetails}
           options={{
             headerShown: false,
             animation: 'slide_from_right',
             animationDuration: 1000
           }} />
-            <Stack.Screen name='itdashboard' component={Itheadhomescreen}
+        <Stack.Screen name='itdashboard' component={Itheadhomescreen}
+          options={{
+            headerShown: false,
+            animation: 'slide_from_right',
+            animationDuration: 1000
+          }} />
+
+        <Stack.Screen name='ItEventdetails' component={itEventDetails}
+          options={{
+            headerShown: false,
+            animation: 'slide_from_right',
+            animationDuration: 1000
+          }} />
+        <Stack.Screen name='SocietyEventDetails' component={CardDetails}
+          options={{
+            headerShown: false,
+            animation: 'slide_from_right',
+            animationDuration: 1000
+          }} />
+        <Stack.Screen name='Card' component={Card}
           options={{
             headerShown: false,
             animation: 'slide_from_right',

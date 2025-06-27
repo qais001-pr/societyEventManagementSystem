@@ -20,16 +20,16 @@ import {
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
-import BouncyCheckbox from "react-native-bouncy-checkbox";
+
 import { useSociety } from '../../context/society/societycontext';
 import axios from 'axios';
 import { ip } from '../../config';
 
 const ApprovedEventDetails = ({ route }) => {
     const naviagtion = useNavigation()
-    const { items, fetchData } = useSociety()
-    const [localChecked, setLocalChecked] = useState(false);
+    const { items, fetchData } = useSociety();
     const { event } = route.params;
+    console.log(event);
     const [rejectionReason, setRejectionReason] = useState('');
     const [showRejectionInput, setShowRejectionInput] = useState(false);
     const [loading, setLoading] = useState(false);
@@ -57,10 +57,8 @@ const ApprovedEventDetails = ({ route }) => {
             setShowRejectionInput(false);
             return;
         }
-        if (!localChecked) {
-            Alert.alert('Check to Approve it')
-            return;
-        }
+        console.log('Event Budget', event.budget);
+        console.log("Society Budget", budget);
         if (parseInt(event.budget) >= parseInt(budget)) {
             Alert.alert('Amount not sufficient');
             return;
@@ -81,14 +79,12 @@ const ApprovedEventDetails = ({ route }) => {
             setLoading(false);
         }
     };
-
-
     const handleReject = async () => {
         if (!showRejectionInput) {
             setShowRejectionInput(true);
             return;
         }
-        if(!rejectionReason){
+        if (!rejectionReason) {
             Alert.alert('Enter Reason to reject it');
             return;
         }
@@ -111,14 +107,25 @@ const ApprovedEventDetails = ({ route }) => {
             }, 2000);
 
         } catch (error) {
-            // console.error('Approval failed:', error);
             Alert.alert('Error', 'Something went wrong while approving.');
             setLoading(false);
         }
     };
 
+    const getStatus = () => {
+        if (event.status === 'Approved' && event.aastatus === null) {
+            return 'Pending';
+        }
+        if (event.status === 'Approved' && event.aastatus === 'Approved') {
+            return 'Approved';
+        }
+        if (event.status === 'Approved' || event.aastatus === 'Rejected') {
+            return 'Rejected';
+        }
+    }
+    let status = getStatus();
     const getStatusColor = () => {
-        switch (event.status.toLowerCase()) {
+        switch (getStatus().toLowerCase()) {
             case 'approved': return '#4CAF50';
             case 'pending': return '#FFC107';
             case 'rejected': return '#F44336';
@@ -127,14 +134,28 @@ const ApprovedEventDetails = ({ route }) => {
     };
 
     const formatTime = (time) => {
-        return new Date(time).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: true });
+        const cleanTime = time.replace(/Z$/, '');
+        const formattedTime = new Date(cleanTime)
+            .toLocaleTimeString('en-PK', { hour: '2-digit', minute: '2-digit', hour12: true })
+            .toLowerCase();
+        return formattedTime;
     };
 
     return (
         <ScrollView style={styles.container}>
-            <View style={[styles.header, { backgroundColor: '#3f51b5' }]}>
-                <Text style={styles.title}>{event.event_name}</Text>
-                <Text style={styles.subtitle}>{event.venue}</Text>
+            <View style={[styles.header, { backgroundColor: '#4CAF50', flexDirection: 'row', justifyContent: 'flex-start' }]}>
+                <TouchableOpacity
+                    style={styles.backButton}
+                    onPress={() => naviagtion.goBack()}
+                >
+                    <Icon name="arrow-left" size={25} color="#fff" />
+                    {/* <Text style={styles.backButtonText}>Back</Text> */}
+                </TouchableOpacity>
+                <View style={{ flexDirection: 'column' }}>
+
+                    <Text style={styles.title}>{event.event_name}</Text>
+                    <Text style={styles.subtitle}>{event.venue}</Text>
+                </View>
             </View>
 
             <Modal visible={loading} transparent={true}>
@@ -143,7 +164,7 @@ const ApprovedEventDetails = ({ route }) => {
             <View style={styles.card}>
                 <View style={styles.statusBadge}>
                     <View style={[styles.statusDot, { backgroundColor: getStatusColor() }]} />
-                    <Text style={styles.statusText}>{event.status}</Text>
+                    <Text style={[styles.statusText, { color: getStatusColor() }]}>{getStatus()}</Text>
                 </View>
                 <Text style={[styles.sectionTitle, { fontWeight: 'bold', color: 'green', maxWidth: Dimensions.get('screen').width, fontSize: 20 }]}>Society: {societyname} </Text>
                 <Text style={styles.sectionTitle}>Total Budget: {budget} </Text>
@@ -165,8 +186,8 @@ const ApprovedEventDetails = ({ route }) => {
                 </View>
 
                 <View style={styles.detailRow}>
-                    <Icon name="attach-money" size={18} color="#555" />
-                    <Text style={styles.detailText}>₹{event.budget}</Text>
+                    <Icon name="money" size={18} color="#555" />
+                    <Text style={styles.detailText}>RS {event.budget}</Text>
                 </View>
 
                 <View style={styles.detailRow}>
@@ -193,34 +214,30 @@ const ApprovedEventDetails = ({ route }) => {
                 {event.approved_date && (
                     <View style={styles.detailRow}>
                         <Icon name="check-circle" size={18} color="#555" />
-                        <Text style={styles.detailText}>
+                        <Text style={styles.detailText}> Assistant Director
                             Approved on {new Date(event.approved_date).toLocaleDateString()}
                         </Text>
                     </View>
                 )}
-
-                {event.rejection_date && (
-                    <View style={styles.detailRow}>
-                        <Icon name="cancel" size={18} color="#555" />
-                        <Text style={styles.detailText}>
-                            Rejected on {new Date(event.rejection_date).toLocaleDateString()}
-                        </Text>
+                {event.adrejectiondate && (
+                    <View style={styles.rejectionContainer}>
+                        <View style={{ flexDirection: 'row' }}>
+                            <Icon name="circle" size={18} color="#c00" style={styles.rejectionIcon} />
+                            <Text style={[styles.detailText, { color: getStatusColor() }]}>
+                                Rejected on {new Date(event.adrejectiondate).toLocaleDateString()}
+                            </Text>
+                        </View>
+                        {event.adreview && (
+                            <View style={{ flexDirection: 'row', alignItems: 'center', marginTop: 5 }}>
+                                <Icon name="comment" size={18} color="#555" style={{ marginRight: 6 }} />
+                                <Text style={[styles.detailText, { fontSize: 16, fontWeight: '600' }]}>
+                                    Review: <Text style={{ fontSize: 15, fontWeight: '400' }}>{event.adreview}</Text>
+                                </Text>
+                            </View>
+                        )}
                     </View>
                 )}
-                <View style={{ flexDirection: 'row', alignContent: 'flex-start' }}>
-                    <BouncyCheckbox
-                        isChecked={localChecked}
-                        fillColor="green"
-                        size={18}
-                        useBuiltInState={false}
-                        iconImageStyle={styles.iconImageStyle}
-                        iconStyle={{ borderColor: 'green' }}
-                        onPress={() => {
-                            setLocalChecked(!localChecked);
-                        }}
-                    />
-                    <Text style={{ fontSize: 16, color: 'black' }}>Check To Confirm</Text>
-                </View>
+
                 {showRejectionInput && (
                     <View style={styles.inputContainer}>
                         <Text style={styles.inputLabel}>Reason for rejection</Text>
@@ -233,8 +250,7 @@ const ApprovedEventDetails = ({ route }) => {
                         />
                     </View>
                 )}
-
-                {event.status.toLowerCase() === 'approved' && (
+                {(status === 'Pending') && (
                     <View style={styles.buttonContainer}>
                         <TouchableOpacity style={styles.buttonWrapper} onPress={handleApprove}>
                             <View style={[styles.button, { backgroundColor: '#4CAF50' }]}>
@@ -276,6 +292,23 @@ const styles = StyleSheet.create({
     buttonWrapper: { flex: 1, marginHorizontal: 5, borderRadius: 12, overflow: 'hidden' },
     button: { flexDirection: 'row', alignItems: 'center', justifyContent: 'center', paddingVertical: 12 },
     buttonText: { color: '#fff', fontWeight: 'bold', fontSize: 15, marginLeft: 8 },
+    rejectionContainer: { flexDirection: 'column', alignItems: 'flex-start', marginBottom: 10 },
+    rejectionIcon: { marginBottom: 5 },
+    reviewContainer: { flexDirection: 'row', alignItems: 'center', marginTop: 5 },
+    reviewIcon: { marginRight: 6 },
+    backButton: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        padding: 10,
+        paddingLeft: 0,
+        marginBottom: 10,
+    },
+    backButtonText: {
+        color: '#fff',
+        fontSize: 16,
+        marginLeft: 5,
+    },
+
 });
 
 export default ApprovedEventDetails;
