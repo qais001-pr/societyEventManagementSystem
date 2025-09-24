@@ -53,8 +53,7 @@ The **BIIT Societies Events Requisition System** is a digital platform designed 
 
 ## Tech Stack
 - **Frontend:** React Native / Web (if applicable)
-- **Backend:** [Specify backend technology if used]
-- **Database:** [Specify database if used]
+- **Backend:** [Server-Repository](https://github.com/qais001-pr/society-event-management-system-server)
 - **Authentication:** Role-based access control
 
 ---
@@ -63,4 +62,5 @@ The **BIIT Societies Events Requisition System** is a digital platform designed 
 1. Clone the repository:
    ```bash
    git clone https://github.com/qais001-pr/societyEventManagementSystem.git
+
 
