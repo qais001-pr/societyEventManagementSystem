@@ -1,95 +1,65 @@
-﻿BIIT Societies Events Requisition System
+# BIIT Societies Events Requisition System
 
-The BIIT Societies Events Requisition System is a digital platform designed to streamline and centralize the process of organizing and managing events conducted by various student societies at the Barani Institute of Information Technology (BIIT).
+The **BIIT Societies Events Requisition System** is a digital platform designed to **streamline and centralize event management** for student societies at the **Barani Institute of Information Technology (BIIT)**. It automates the entire event lifecycle—from requisition submission to final execution—providing a **collaborative workflow** among all stakeholders.  
 
+---
 
-Traditionally, event requisition processes involved manual paperwork, multiple approval chains, and communication bottlenecks between departments. This system aims to automate and digitize the complete event lifecycle, from initial requisition to final execution, providing a collaborative workflow among stakeholders including:
+## Features
 
+### Role-Based Functionalities
 
-•	Society Chairpersons
+**Society Chairperson**
+- Submit new event requisitions (event name, description, date & time, venue preferences, budget, IT and logistic support)
+- View status of submitted events (Pending, Approved, Rejected, Completed)
+- Edit or cancel events in pending status
 
-•	Assistant Director of Student Affairs
+**Assistant Director of Student Affairs**
+- View all submitted requisitions
+- Approve or reject events with remarks
+- Forward approved events to Accounts, Staff, and IT Heads
+- View complete event history
 
-•	Accounts Department
+**Accounts Department**
+- Review approved events
+- Verify and approve budgets
+- Mark budgets as allocated
+- Reject budget requests with reasons
 
-•	Staff Head
+**Staff Head**
+- Review logistical requirements (chairs, tables, catering, etc.)
+- Confirm availability and arrangements
 
-•	IT Head
+**IT Head**
+- Review technical requirements (projectors, sound systems, internet, etc.)
+- Approve or reject based on feasibility
 
-Each of these roles plays a critical part in ensuring that student events are planned, approved, funded, and executed efficiently with transparency and accountability.
+### System-Wide Features
+- Role-based authentication and login
+- Event dashboard with filters for easy management
+- Audit trails for tracking all actions and decisions
+- Real-time notifications for status updates
 
+---
 
-Objectives:
+## Objectives
+- **Workflow Automation:** Digitize multi-stage event requisition and approval processes
+- **Transparency & Traceability:** Track event status at each stage
+- **Efficient Resource Allocation:** Optimize planning for venues, budgets, logistics, and IT resources
+- **Accountability:** Maintain an auditable log of decisions
+- **User-Friendly Interface:** Responsive UI accessible via web and mobile
+- **Role-Based Access Control:** Users access only relevant modules
 
-The primary objectives of the BIIT Societies Events Requisition System are:
-•	Automation of Workflow: Digitize and automate the multi-stage event requisition and approval process.
+---
 
-•	Transparency and Traceability: Allow all stakeholders to track the status of each event requisition at every stage.
+## Tech Stack
+- **Frontend:** React Native / Web (if applicable)
+- **Backend:** [Specify backend technology if used]
+- **Database:** [Specify database if used]
+- **Authentication:** Role-based access control
 
-•	Efficient Resource Allocation: Facilitate better planning and management of resources such as venue, budget, logistics, and IT support.
+---
 
-•	Accountability: Maintain an auditable log of decisions made by each role, from chairpersons to department heads.
-
-•	User-Friendly Interface: Provide a responsive, intuitive user interface accessible via mobile and web platforms.
-
-•	Role-Based Access Control: Ensure each user accesses only relevant parts of the system according to their role.
-
-
-Functional Requirements
-
-The system’s functional requirements are categorized based on the roles of users:
-
-1.	Society Chairperson
-
-•	Submit new event requisitions with details such as:
-
-o	Event name, description, date & time
-
-o	Venue preferences
-
-o	Estimated budget
-
-o	Required IT and logistic support
-
-•	View status of submitted events (Pending, Approved, Rejected, Completed)
-
-•	Edit or cancel events (only in pending status)
-
-2.	Assistant Director of Student Affairs
-
-•	View all submitted requisitions
-
-•	Approve or reject events with remarks
-
-•	Forward approved events to the Accounts, Staff, and IT Heads
-
-•	View event history
-
-3.	Accounts Department
-
-•	Review approved events
-
-•	Verify and approve budget requests
-
-•	Mark budget as allocated
-
-•	Reject with reason if budget request is not feasible
-
-4.	Staff Head
-
-•	Review logistical requirements (chairs, tables, catering, etc.)
-
-•	Confirm availability and arrangements
-
-5.	IT Head
-
-•	Review technical requirements (projectors, sound systems, internet, etc.)
-
-•	Approve or reject based on feasibility
-
-System-Wide Features
-
-•	Role-based authentication and login
-
-•	Event dashboard with filters
-
+## Installation & Setup
+1. Clone the repository:
+   ```bash
+   git clone <repository-url>
